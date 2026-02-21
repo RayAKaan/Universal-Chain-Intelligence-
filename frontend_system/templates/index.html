@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="/static/css/animations.css" />
 </head>
 <body>
+  <div class="system-pulse" aria-hidden="true"></div>
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
   <header class="topbar">
     <div class="topbar-left">
       <button id="menu-toggle" class="icon-btn" type="button" aria-label="Toggle sidebar">☰</button>
@@ -21,11 +24,18 @@
     </div>
     <div class="topbar-right">
       <div id="top-status" class="status-pill">Connecting…</div>
+      <div id="presence-indicator" class="presence-indicator" aria-label="UCI presence indicator" role="status">
+        <div class="presence-core"></div>
+        <div class="presence-ring"></div>
+        <div class="presence-particles" aria-hidden="true"></div>
+      </div>
     </div>
   </header>
 
   <aside class="sidebar" id="sidebar"></aside>
+  <button id="mobile-orb-toggle" class="mobile-orb-toggle" type="button" aria-label="Open navigation">◉</button>
   <main class="content"><div id="view"></div></main>
+  <div id="orb-ripple" class="orb-ripple" aria-hidden="true"></div>
   <div id="toast-container"></div>
   <div id="modal" class="modal hidden"><div class="modal-content"><div id="modal-body"></div></div></div>
   <script src="/static/js/utils.js"></script>

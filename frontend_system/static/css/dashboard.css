@@ -1,1 +1,60 @@
-.stat-value{font-size:28px;font-weight:700}.phase-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px;background:#3fb950}.resource-row{display:flex;align-items:center;gap:8px;margin:8px 0}
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.phase-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  background: #00ff9d;
+}
+
+.resource-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.gauge-wrap {
+  position: relative;
+  width: 190px;
+  height: 140px;
+  margin: auto;
+}
+
+.gauge-wrap canvas {
+  filter: drop-shadow(0 0 12px rgba(0, 242, 255, 0.28));
+}
+
+.trust-badge {
+  background:
+    linear-gradient(115deg, rgba(0, 242, 255, 0.2), rgba(157, 0, 255, 0.24), rgba(0, 255, 157, 0.2));
+  background-size: 200% 200%;
+  animation: shimmer 4s linear infinite;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.chart-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-shell::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -30%;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.16), transparent 70%);
+  transform: rotate(8deg);
+  pointer-events: none;
+}
+
+.chart-shell:hover {
+  transform: perspective(900px) rotateX(2deg) rotateY(-2deg);
+}

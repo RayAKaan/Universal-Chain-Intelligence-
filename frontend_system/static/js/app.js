@@ -25,6 +25,7 @@ class UCIApp {
   init() {
     this._initNav();
     this._wireLayoutControls();
+    this._initAtmospherics();
     this.views = {
       '/dashboard': new DashboardView(this),
       '/goals': new GoalConsoleView(this),
@@ -81,6 +82,69 @@ class UCIApp {
         document.body.classList.remove('sidebar-open-mobile');
       }
     };
+
+    const orbToggle = document.getElementById('mobile-orb-toggle');
+    if (orbToggle) {
+      orbToggle.onclick = () => {
+        document.body.classList.toggle('sidebar-open-mobile');
+      };
+    }
+
+    window.addEventListener('scroll', () => {
+      const topbar = document.querySelector('.topbar');
+      if (topbar) topbar.classList.toggle('scrolled', window.scrollY > 8);
+    });
+
+    document.addEventListener('submit', (event) => {
+      const text = event.target?.textContent?.toLowerCase() || '';
+      if (text.includes('goal')) {
+        this._triggerOrbRipple();
+      }
+    });
+  }
+
+  _initAtmospherics() {
+    const cursor = document.getElementById('cursor-glow');
+    if (cursor) {
+      window.addEventListener('mousemove', (event) => {
+        cursor.style.left = `${event.clientX}px`;
+        cursor.style.top = `${event.clientY}px`;
+      });
+    }
+  }
+
+  _positionActiveIndicator() {
+    const nav = document.querySelector('.sidebar-nav');
+    const active = nav?.querySelector('.nav-link.active');
+    if (!nav || !active) return;
+
+    nav.style.setProperty('--active-top', `${active.offsetTop}px`);
+    nav.style.setProperty('--active-height', `${active.offsetHeight}px`);
+  }
+
+  _setPresenceState(status) {
+    const orb = document.getElementById('presence-indicator');
+    if (!orb) return;
+
+    const normalized = String(status || '').toLowerCase();
+    orb.classList.toggle('thinking', normalized.includes('processing') || normalized.includes('active'));
+    if (normalized.includes('degraded') || normalized.includes('error')) {
+      orb.style.setProperty('--accent-blue', '#ff004c');
+      return;
+    }
+    if (normalized.includes('optimal') || normalized.includes('healthy')) {
+      orb.style.setProperty('--accent-blue', '#00ff9d');
+      return;
+    }
+    orb.style.removeProperty('--accent-blue');
+  }
+
+  _triggerOrbRipple() {
+    const ripple = document.getElementById('orb-ripple');
+    if (!ripple) return;
+    ripple.classList.remove('active');
+    void ripple.offsetWidth;
+    ripple.classList.add('active');
   }
 
   async navigate(route) {
@@ -91,6 +155,7 @@ class UCIApp {
     document.querySelectorAll('.nav-link').forEach((link) => {
       link.classList.toggle('active', link.getAttribute('href') === `#${route}`);
     });
+    this._positionActiveIndicator();
 
     const titleEl = document.getElementById('current-view-title');
     if (titleEl) titleEl.textContent = activeMeta.label;
@@ -125,8 +190,10 @@ class UCIApp {
       try {
         const status = await this.api.getStatus();
         document.getElementById('top-status').textContent = `${status.status} • ${status.active_goals} active goals`;
+        this._setPresenceState(status.status);
       } catch (_error) {
         document.getElementById('top-status').textContent = 'Disconnected';
+        this._setPresenceState('error');
       }
     }, 5000);
   }
