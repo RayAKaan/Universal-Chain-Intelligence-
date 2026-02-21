@@ -1,0 +1,6 @@
+from __future__ import annotations
+from optimization_system.models.optimization_rule import OptimizationRule, RuleCondition, RuleAction
+
+def get_builtin_rules():
+    defs=[('SLOW_CAPABILITY_RULE','capability latency high','latency_ms','gt',200,'create_opportunity'),('LOW_RELIABILITY_RULE','reliability low','reliability','lt',0.9,'create_opportunity'),('HIGH_RESOURCE_USAGE_RULE','cpu high','system_cpu_usage_percent','gt',90,'alert'),('STALE_CAPABILITY_RULE','stale capability','days_since_used','gt',7,'create_opportunity'),('STRATEGY_UNDERPERFORMANCE_RULE','strategy low success','strategy_success_rate','lt',0.5,'create_opportunity'),('EXCESSIVE_RETRY_RULE','retries high','retry_avg','gt',3,'create_opportunity'),('PLANNING_TOO_SLOW_RULE','planning slow','planning_duration_ms','gt',10000,'create_opportunity'),('MEMORY_GROWTH_RULE','memory growth','system_memory_usage_percent','gt',80,'alert'),('CONSTRUCTION_FAILURE_RULE','construction failures','build_success_rate','lt',0.7,'create_opportunity'),('CAPABILITY_CONCENTRATION_RULE','single capability concentration','capability_concentration','gt',0.5,'alert')]
+    return [OptimizationRule(name=n,description=d,rule_type='threshold',condition=RuleCondition(m,op,t,300,{}),action=RuleAction(a,{},1),source='manual') for n,d,m,op,t,a in defs]
