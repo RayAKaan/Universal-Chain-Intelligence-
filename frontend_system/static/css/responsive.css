@@ -1,0 +1,1 @@
+@media (max-width:1200px){#app-shell{grid-template-columns:72px 1fr}.view-grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:900px){#sidebar{display:none}#app-shell{grid-template-columns:1fr}.view-grid.cols-2,.view-grid.cols-4{grid-template-columns:1fr}}@media (max-width:600px){#main-content{padding:10px}#toast-container{width:92%;right:4%}}

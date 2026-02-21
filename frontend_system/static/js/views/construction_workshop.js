@@ -1,0 +1,4 @@
+class ConstructionWorkshopView{constructor(app){this.app=app}async mount(){const t=await this.app.api.getTemplates();this.app.view.innerHTML=`<section class='card'><div class='card-header'><div class='card-title'>Construction Workshop</div></div><div class='card-body'><div>${(t.templates||[]).map(x=>`<span class='chip'>${x.name}</span>`).join(' ')}</div><textarea id='spec' rows='8' style='margin-top:10px'>{
+  "name": "next_tool",
+  "type": "service"
+}</textarea><button class='btn btn-primary' id='build'>Build</button><div id='build-out' class='terminal' style='margin-top:10px'></div></div></section>`;document.getElementById('build').onclick=async()=>{let spec={};try{spec=JSON.parse(document.getElementById('spec').value)}catch{}const r=await this.app.api.build(spec);document.getElementById('build-out').textContent=JSON.stringify(r,null,2)}}} window.ConstructionWorkshopView=ConstructionWorkshopView;

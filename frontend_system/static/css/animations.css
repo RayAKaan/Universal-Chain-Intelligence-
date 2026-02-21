@@ -1,0 +1,14 @@
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,0)}50%{box-shadow:0 0 20px 4px rgba(0,212,255,.15)}}
+@keyframes scanLine{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+@keyframes dataStream{0%{background-position:0 0}100%{background-position:0 100%}}
+@keyframes breathe{0%,100%{opacity:.4}50%{opacity:1}}
+@keyframes gridReveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes counterUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes orbitalRotate{from{transform:rotateX(25deg) rotateZ(0deg)}to{transform:rotateX(25deg) rotateZ(360deg)}}
+.stagger-in>*{animation:fadeInUp var(--duration-normal) var(--ease-out-expo) both}
+.stagger-in>*:nth-child(1){animation-delay:50ms}.stagger-in>*:nth-child(2){animation-delay:100ms}.stagger-in>*:nth-child(3){animation-delay:150ms}.stagger-in>*:nth-child(4){animation-delay:200ms}.stagger-in>*:nth-child(5){animation-delay:250ms}.stagger-in>*:nth-child(6){animation-delay:300ms}

@@ -1,0 +1,4 @@
+class SystemConsoleView{constructor(app){this.app=app;this.hist=[];this.hi=0}async render(){document.getElementById('view').innerHTML=`<div class='card'><h3>System Console</h3><div id='term' class='terminal'></div><div style='display:flex;gap:8px;margin-top:8px'><span>uci&gt;</span><input id='cmd' class='input'/><button class='btn primary' id='run'>Run</button></div></div>`;const run=()=>this.exec(document.getElementById('cmd').value);document.getElementById('run').onclick=run;document.getElementById('cmd').addEventListener('keydown',e=>{if(e.key==='Enter')run()})}async exec(c){if(!c)return;this.hist.push(c);const r=await this.app.api.executeCommand(c);const t=document.getElementById('term');t.textContent+=`
+uci> ${c}
+${r.output}
+`;document.getElementById('cmd').value='';t.scrollTop=t.scrollHeight}};window.SystemConsoleView=SystemConsoleView;
