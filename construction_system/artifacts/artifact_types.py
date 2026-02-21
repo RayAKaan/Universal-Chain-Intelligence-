@@ -1,0 +1,1 @@
+from construction_system.models.artifact import ArtifactType
