@@ -1,0 +1,1 @@
+from optimization_system.models.opportunity import OpportunityType
