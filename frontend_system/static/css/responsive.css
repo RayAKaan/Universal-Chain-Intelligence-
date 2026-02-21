@@ -9,17 +9,26 @@
     padding: 0 10px;
   }
 
-  #current-view-title {
+  #current-view-title,
+  .brand {
     display: none;
   }
 
   .sidebar {
-    transform: translateX(-100%);
+    transform: translateX(-108%);
     width: 272px;
+    top: 0;
+    padding-top: 84px;
+    border-right-color: rgba(0, 242, 255, 0.25);
   }
 
   body.sidebar-open-mobile .sidebar {
     transform: translateX(0);
+  }
+
+  .mobile-orb-toggle {
+    display: grid;
+    place-items: center;
   }
 
   .content {
