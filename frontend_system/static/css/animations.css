@@ -1,1 +1,81 @@
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideIn{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}@keyframes pulse{0%{opacity:1}50%{opacity:.7}100%{opacity:1}}@keyframes progressBar{from{width:0}to{width:100%}}@keyframes shimmer{0%{background-position:-200px 0}100%{background-position:200px 0}}@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: .7; }
+  100% { opacity: 1; }
+}
+
+@keyframes progressBar {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -300px 0; }
+  100% { background-position: 300px 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes breathe-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1.2%, -0.8%); }
+  20% { transform: translate(0.8%, -1.6%); }
+  30% { transform: translate(-0.5%, 1%); }
+  40% { transform: translate(1.2%, 0.5%); }
+  50% { transform: translate(-1.1%, -0.9%); }
+  60% { transform: translate(1%, -0.2%); }
+  70% { transform: translate(0.3%, 1%); }
+  80% { transform: translate(-1%, 0.3%); }
+  90% { transform: translate(0.6%, -0.7%); }
+}
+
+@keyframes card-border-pulse {
+  0%, 100% { box-shadow: 0 8px 34px rgba(0, 0, 0, 0.42), inset 0 0 0 1px rgba(0, 242, 255, 0.03); }
+  50% { box-shadow: 0 8px 34px rgba(0, 0, 0, 0.42), inset 0 0 0 1px rgba(0, 242, 255, 0.08); }
+}
+
+@keyframes card-hover-pulse {
+  0%, 100% { border-color: rgba(0, 242, 255, 0.5); }
+  50% { border-color: rgba(0, 242, 255, 0.1); }
+}
+
+@keyframes spin-ring {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orb-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+@keyframes orb-ripple-expand {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 0; transform: scale(220); }
+}
+
+@keyframes page-materialize {
+  0% { opacity: 0; transform: translateX(14px); filter: blur(12px); }
+  100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+
+@keyframes toast-materialize {
+  0% { opacity: 0; transform: scale(0.9); filter: blur(8px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
