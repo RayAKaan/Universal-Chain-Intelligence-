@@ -16,6 +16,20 @@ from frontend_system.integration.realtime_feed import RealtimeFeed
 from frontend_system.server.web_server import UCIWebServer
 
 
+def _build_intelligence_core():
+    try:
+        from autonomy_system.main import build_core
+    except Exception as exc:
+        logging.getLogger(__name__).warning('Failed to import autonomy core; falling back to standalone mock mode: %s', exc)
+        return None
+
+    try:
+        return build_core()
+    except Exception as exc:
+        logging.getLogger(__name__).warning('Failed to initialize autonomy core; falling back to standalone mock mode: %s', exc)
+        return None
+
+
 def _setup_logging():
     import os
     os.makedirs('logs', exist_ok=True)
@@ -44,9 +58,10 @@ def _simulate_activity(connector: UCIConnector, feed: RealtimeFeed, stop: Event)
 
 def run(mode: str):
     _setup_logging()
-    connector = UCIConnector(None if mode == 'standalone' else None)
+    intelligence_core = None if mode == 'standalone' else _build_intelligence_core()
+    connector = UCIConnector(intelligence_core)
     feed = RealtimeFeed()
-    server = UCIWebServer(config.HOST, config.PORT, connector, config)
+    server = UCIWebServer(config.HOST, config.PORT, connector, config, realtime_feed=feed)
     server.start()
 
     stop = Event()

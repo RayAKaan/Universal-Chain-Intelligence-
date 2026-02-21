@@ -4,7 +4,7 @@ import json
 import logging
 import threading
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from frontend_system.server.api_router import APIRouter
 from frontend_system.server.static_handler import StaticHandler
@@ -14,8 +14,9 @@ from frontend_system.server.middleware.logging_middleware import LoggingMiddlewa
 from frontend_system.server.middleware.safety_middleware import SafetyMiddleware
 
 class UCIWebServer:
-    def __init__(self, host: str = '0.0.0.0', port: int = 8080, uci_connector=None, config=None):
+    def __init__(self, host: str = '0.0.0.0', port: int = 8080, uci_connector=None, config=None, realtime_feed=None):
         self.host=host; self.port=port; self.uci=uci_connector; self.config=config
+        self.realtime_feed = realtime_feed
         self._httpd=None; self._thread=None
 
     def start(self)->None:
@@ -46,13 +47,26 @@ class UCIWebServer:
                 safe,smsg=safemw.check(self.path,payload)
                 if not safe:return self._send(403,json.dumps({'error':smsg}).encode())
                 code,data=router.route(self.command,self.path,payload)
+                if code < 400 and self.command in ('POST', 'PUT', 'DELETE') and self.server.realtime_feed is not None:
+                    self.server.realtime_feed.push_event('API_MUTATION', {'method': self.command, 'path': self.path, 'payload': payload})
                 self._send(code,json.dumps(data,default=str).encode())
 
             def do_GET(self):
                 p=urlparse(self.path).path
                 if p.startswith('/api/'): return self._handle_api()
                 if p=='/ws':
-                    return self._send(200,json.dumps({'events':[]}).encode())
+                    if self.server.realtime_feed is None:
+                        return self._send(200, json.dumps({'events': [], 'next_sequence': 0}).encode())
+
+                    q = parse_qs(urlparse(self.path).query)
+                    since = int((q.get('since') or ['0'])[-1])
+                    timeout = float((q.get('timeout') or [str(self.server.config.LONG_POLL_TIMEOUT_SECONDS)])[-1])
+                    event_types = set((q.get('events') or ['*'])[-1].split(','))
+                    events = self.server.realtime_feed.get_feed(subscription_id='', timeout=timeout, since_sequence=since)
+                    if '*' not in event_types:
+                        events = [e for e in events if e.get('event_type') in event_types]
+                    next_sequence = events[-1]['sequence'] if events else since
+                    return self._send(200, json.dumps({'events': events, 'next_sequence': next_sequence}).encode())
                 file_path=static.resolve(p)
                 if file_path and file_path.exists():
                     data,ctype=static.read(file_path); return self._send(200,data,ctype)
@@ -63,6 +77,8 @@ class UCIWebServer:
                 self._send(404,b'Not found','text/plain')
 
         self._httpd=ThreadingHTTPServer((self.host,self.port),Handler)
+        self._httpd.realtime_feed = self.realtime_feed
+        self._httpd.config = self.config
         self._thread=threading.Thread(target=self._httpd.serve_forever,daemon=True)
         self._thread.start()
 

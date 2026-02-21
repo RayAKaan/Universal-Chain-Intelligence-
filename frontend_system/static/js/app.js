@@ -44,7 +44,30 @@ class UCIApp {
 
     this.router.onRouteChange((route) => this.navigate(route));
     this.navigate(this.router.getCurrentRoute());
+    this._initModeBadge();
+    this._initRealtime();
     this.startPolling();
+  }
+
+  async _initModeBadge() {
+    const modeEl = document.getElementById('top-mode');
+    if (!modeEl) return;
+    try {
+      const info = await this.api.getVersion();
+      modeEl.textContent = `mode: ${info.mode || 'unknown'} • api ${info.api_version || 'n/a'}`;
+    } catch (_error) {
+      modeEl.textContent = 'mode: unavailable';
+    }
+  }
+
+  _initRealtime() {
+    this.ws.onEvent((event) => {
+      const eventType = event?.event_type || '';
+      if (eventType === 'API_MUTATION' || eventType.includes('PANIC') || eventType.includes('AUTONOMY')) {
+        this.refresh();
+      }
+    });
+    this.ws.start();
   }
 
   _initNav() {
