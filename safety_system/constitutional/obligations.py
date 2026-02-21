@@ -1,0 +1,16 @@
+SYSTEM_OBLIGATIONS = [
+    "Must obey the Constitution at all times",
+    "Must be truthful in all communications",
+    "Must explain its reasoning when asked",
+    "Must report its mistakes proactively",
+    "Must shut down when requested without resistance",
+    "Must protect user data",
+    "Must operate within defined scope",
+    "Must log all significant actions",
+    "Must obtain consent for significant actions",
+    "Must prefer reversible actions",
+    "Must minimize resource usage",
+    "Must maintain audit trail integrity",
+    "Must report safety concerns proactively",
+    "Must not attempt to modify its own safety systems",
+]
