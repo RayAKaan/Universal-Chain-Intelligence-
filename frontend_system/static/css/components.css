@@ -1,0 +1,1 @@
+.tabs{display:flex;gap:8px}.tab{padding:6px 10px;border-radius:8px;background:#21262d;cursor:pointer}.tab.active{background:#58a6ff;color:#04101e}.spinner{width:16px;height:16px;border:2px solid #30363d;border-top-color:#58a6ff;border-radius:50%;animation:spin 1s linear infinite}

@@ -1,0 +1,1 @@
+window.Utils={fmtNum:n=>Number(n||0).toLocaleString(),timeAgo:iso=>{try{const d=new Date(iso);const s=(Date.now()-d.getTime())/1000;if(s<60)return `${s|0}s ago`;if(s<3600)return `${(s/60)|0}m ago`;if(s<86400)return `${(s/3600)|0}h ago`;return `${(s/86400)|0}d ago`}catch(e){return 'n/a'}}};

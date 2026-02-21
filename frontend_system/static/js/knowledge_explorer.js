@@ -1,0 +1,1 @@
+class KnowledgeExplorerView{constructor(app){this.app=app}async render(){const d=await this.app.api.queryKnowledge({});document.getElementById('view').innerHTML=`<div class='card'><h3>Knowledge Explorer</h3>${UIComponents.codeBlock(JSON.stringify(d.entries||[],null,2))}</div>`}};window.KnowledgeExplorerView=KnowledgeExplorerView;
