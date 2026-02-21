@@ -1,5 +1,5 @@
 
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import urlparse, parse_qs
 from frontend_system.server.api_handlers.goal_handler import GoalHandler
 from frontend_system.server.api_handlers.status_handler import StatusHandler
 from frontend_system.server.api_handlers.capability_handler import CapabilityHandler
@@ -16,80 +16,93 @@ from frontend_system.server.api_handlers.console_handler import ConsoleHandler
 
 class APIRouter:
     def __init__(self, connector):
-        self.goal=GoalHandler(connector); self.status=StatusHandler(connector); self.cap=CapabilityHandler(connector)
-        self.plan=PlanHandler(connector); self.cons=ConstructionHandler(connector); self.imp=ImprovementHandler(connector)
-        self.safe=SafetyHandler(connector); self.sett=SettingsHandler(connector); self.k=KnowledgeHandler(connector)
-        self.n=NotificationHandler(connector); self.t=TimelineHandler(connector); self.h=HealthHandler(connector)
-        self.c=ConsoleHandler(connector); self.connector=connector
+        self.h={
+            'goals':GoalHandler(connector),'status':StatusHandler(connector),'capabilities':CapabilityHandler(connector),
+            'plans':PlanHandler(connector),'construction':ConstructionHandler(connector),'improvements':ImprovementHandler(connector),
+            'safety':SafetyHandler(connector),'settings':SettingsHandler(connector),'knowledge':KnowledgeHandler(connector),
+            'notifications':NotificationHandler(connector),'timeline':TimelineHandler(connector),'health':HealthHandler(connector),
+            'console':ConsoleHandler(connector)
+        }
+        self.connector=connector
 
-    def _parts(self,path): return [p for p in path.split('/') if p]
-    def _query(self,path):
-        qs=parse_qs(urlparse(path).query); return {k:v[-1] for k,v in qs.items()}
+    def _q(self,path):
+        return {k:v[-1] for k,v in parse_qs(urlparse(path).query).items()}
 
     def route(self, method, path, payload):
         pure=urlparse(path).path
-        q=self._query(path)
-        parts=self._parts(pure)
-        if pure=='/api/status': return self.status.status()
-        if pure=='/api/status/health': return self.status.health()
-        if pure=='/api/status/dashboard': return self.status.dashboard()
-        if pure=='/api/goals' and method=='POST': return self.goal.submit(payload)
-        if pure=='/api/goals' and method=='GET': return self.goal.list(q)
-        if pure=='/api/goals/history': return self.goal.list(q)
-        if len(parts)>=3 and parts[0]=='api' and parts[1]=='goals':
-            gid=parts[2]
-            if len(parts)==3 and method=='GET': return self.goal.detail(gid)
-            if parts[-1]=='cancel': return self.goal.cancel(gid)
-            if parts[-1]=='pause': return self.goal.pause(gid)
-            if parts[-1]=='resume': return self.goal.resume(gid)
-        if pure=='/api/capabilities' and method=='GET': return self.cap.list(q)
-        if pure=='/api/capabilities/summary': return self.cap.summary()
-        if pure=='/api/capabilities/discover' and method=='POST': return self.cap.discover()
-        if len(parts)>=4 and parts[:3]==['api','capabilities','benchmark'] and method=='POST': return self.cap.benchmark(parts[3])
-        if len(parts)==3 and parts[:2]==['api','capabilities']: return self.cap.detail(parts[2])
-        if pure=='/api/plans': return self.plan.list()
-        if len(parts)>=3 and parts[:2]==['api','plans']:
-            pid=parts[2]
-            if len(parts)==3:return self.plan.detail(pid)
-            if parts[3]=='graph': return self.plan.graph(pid)
-            if parts[3]=='progress': return self.plan.progress(pid)
-        if pure=='/api/construction/build' and method=='POST': return self.cons.build(payload)
-        if pure=='/api/construction/artifacts': return self.cons.artifacts()
-        if pure=='/api/construction/templates': return self.cons.templates()
-        if pure=='/api/construction/history': return self.cons.history()
-        if pure=='/api/improvements': return self.imp.list()
-        if pure=='/api/improvements/active': return self.imp.active()
-        if pure=='/api/improvements/history': return self.imp.history()
-        if pure=='/api/improvements/impact': return self.imp.impact()
-        if pure=='/api/improvements/cycle' and method=='POST': return self.imp.cycle()
-        if pure=='/api/improvements/bottlenecks': return self.imp.bottlenecks()
-        if pure=='/api/improvements/opportunities': return self.imp.opportunities()
-        if pure=='/api/safety/status': return self.safe.status()
-        if pure=='/api/safety/audit': return self.safe.audit(q)
-        if pure=='/api/safety/trust': return self.safe.trust()
-        if pure=='/api/safety/alignment': return self.safe.alignment()
-        if pure=='/api/safety/violations': return self.safe.violations()
-        if pure=='/api/safety/containment': return self.safe.containment()
-        if pure=='/api/safety/emergency/panic' and method=='POST': return self.safe.panic(payload)
-        if pure=='/api/safety/emergency/reset' and method=='POST': return self.safe.reset(payload)
-        if pure=='/api/settings' and method=='GET': return self.sett.get()
-        if pure=='/api/settings/autonomy' and method=='POST': return self.sett.autonomy(payload)
-        if pure=='/api/settings/config' and method=='POST': return self.sett.config(payload)
-        if pure=='/api/settings/autonomy/levels' and method=='GET': return self.sett.levels()
-        if pure=='/api/knowledge' and method=='GET': return self.k.query(q)
-        if pure=='/api/knowledge' and method=='POST': return self.k.add(payload)
-        if pure=='/api/knowledge/stats': return self.k.stats()
-        if pure=='/api/notifications' and method=='GET': return self.n.list(q)
-        if pure=='/api/notifications/count' and method=='GET': return self.n.count()
-        if len(parts)>=4 and parts[:2]==['api','notifications'] and parts[-1]=='read' and method=='POST': return self.n.read(parts[2])
-        if pure=='/api/timeline': return self.t.list(q)
-        if pure=='/api/console/execute' and method=='POST': return self.c.execute(payload)
-        if pure=='/api/console/commands': return self.c.commands()
-        if pure=='/api/health/realtime': return self.h.realtime()
-        if pure=='/api/health/phases': return self.h.phases()
-        if pure=='/api/health/resources': return self.h.resources()
-        if pure=='/api/health/history': return self.h.history()
+        parts=[p for p in pure.split('/') if p]
+        q=self._q(path)
+        if pure=='/api/status': return self.h['status'].status()
+        if pure=='/api/status/health': return self.h['status'].health()
+        if pure=='/api/status/dashboard': return self.h['status'].dashboard()
         if pure=='/api/system/info': return 200, self.connector.get_system_info()
-        if pure=='/api/system/ask': return 200, {'answer':self.connector.ask_system(q.get('q',''))}
-        if pure=='/api/system/shutdown' and method=='POST': return 200, {'ok':self.connector.shutdown()}
+        if pure=='/api/system/ask': return 200, {'answer': self.connector.ask_system(q.get('q',''))}
+        if pure=='/api/system/shutdown' and method=='POST': return 200, {'ok': self.connector.shutdown()}
+        if parts[:2]==['api','goals']:
+            h=self.h['goals']
+            if len(parts)==2 and method=='POST': return h.submit(payload)
+            if len(parts)==2 and method=='GET': return h.list(q)
+            if len(parts)==3 and parts[2]=='history': return h.list(q)
+            if len(parts)>=3:
+                gid=parts[2]
+                if len(parts)==3 and method=='GET': return h.detail(gid)
+                if len(parts)==4 and parts[3]=='cancel': return h.cancel(gid)
+                if len(parts)==4 and parts[3]=='pause': return h.pause(gid)
+                if len(parts)==4 and parts[3]=='resume': return h.resume(gid)
+        if parts[:2]==['api','capabilities']:
+            h=self.h['capabilities']
+            if len(parts)==2: return h.list(q)
+            if len(parts)==3 and parts[2]=='summary': return h.summary()
+            if len(parts)==3 and parts[2]=='discover' and method=='POST': return h.discover()
+            if len(parts)==4 and parts[2]=='benchmark' and method=='POST': return h.benchmark(parts[3])
+            if len(parts)==3: return h.detail(parts[2])
+        if parts[:2]==['api','plans']:
+            h=self.h['plans']
+            if len(parts)==2: return h.list()
+            if len(parts)==3: return h.detail(parts[2])
+            if len(parts)==4 and parts[3]=='graph': return h.graph(parts[2])
+            if len(parts)==4 and parts[3]=='progress': return h.progress(parts[2])
+        if parts[:2]==['api','construction']:
+            h=self.h['construction']
+            if pure=='/api/construction/build' and method=='POST': return h.build(payload)
+            if pure=='/api/construction/artifacts': return h.artifacts()
+            if pure=='/api/construction/templates': return h.templates()
+            if pure=='/api/construction/history': return h.history()
+        if parts[:2]==['api','improvements']:
+            h=self.h['improvements']
+            m={
+                '/api/improvements':h.list,'/api/improvements/active':h.active,'/api/improvements/history':h.history,
+                '/api/improvements/impact':h.impact,'/api/improvements/bottlenecks':h.bottlenecks,'/api/improvements/opportunities':h.opportunities
+            }
+            if pure=='/api/improvements/cycle' and method=='POST': return h.cycle()
+            if pure in m: return m[pure]()
+        if parts[:2]==['api','safety']:
+            h=self.h['safety']
+            m={'/api/safety/status':h.status,'/api/safety/audit':lambda:h.audit(q),'/api/safety/trust':h.trust,'/api/safety/alignment':h.alignment,'/api/safety/violations':h.violations,'/api/safety/containment':h.containment}
+            if pure=='/api/safety/emergency/panic' and method=='POST': return h.panic(payload)
+            if pure=='/api/safety/emergency/reset' and method=='POST': return h.reset(payload)
+            if pure in m: return m[pure]()
+        if parts[:2]==['api','settings']:
+            h=self.h['settings']
+            if pure=='/api/settings' and method=='GET': return h.get()
+            if pure=='/api/settings/autonomy' and method=='POST': return h.autonomy(payload)
+            if pure=='/api/settings/config' and method=='POST': return h.config(payload)
+            if pure=='/api/settings/autonomy/levels': return h.levels()
+        if parts[:2]==['api','knowledge']:
+            h=self.h['knowledge']
+            if pure=='/api/knowledge' and method=='GET': return h.query(q)
+            if pure=='/api/knowledge' and method=='POST': return h.add(payload)
+            if pure=='/api/knowledge/stats': return h.stats()
+        if parts[:2]==['api','notifications']:
+            h=self.h['notifications']
+            if pure=='/api/notifications' and method=='GET': return h.list(q)
+            if pure=='/api/notifications/count' and method=='GET': return h.count()
+            if len(parts)==4 and parts[3]=='read' and method=='POST': return h.read(parts[2])
+        if pure=='/api/timeline': return self.h['timeline'].list(q)
+        if pure=='/api/console/execute' and method=='POST': return self.h['console'].execute(payload)
+        if pure=='/api/console/commands': return self.h['console'].commands()
+        if pure=='/api/health/realtime': return self.h['health'].realtime()
+        if pure=='/api/health/phases': return self.h['health'].phases()
+        if pure=='/api/health/resources': return self.h['health'].resources()
+        if pure=='/api/health/history': return self.h['health'].history()
         return 404, {'error':'not found'}

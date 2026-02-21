@@ -1,9 +1,9 @@
 
-class Router{constructor(){this.routes={};this.cb=null;window.addEventListener('hashchange',()=>this._emit())}
-register(path,view){this.routes[path]=view}
-navigate(path){location.hash=path}
-getCurrentRoute(){return location.hash.replace('#','')||'/dashboard'}
-onRouteChange(cb){this.cb=cb}
-_emit(){if(this.cb)this.cb(this.getCurrentRoute())}
+class Router{
+  constructor(){this.routes={};this.onChange=null;window.addEventListener('hashchange',()=>this.emit())}
+  register(path,view){this.routes[path]=view}
+  current(){return location.hash.replace('#','')||'/dashboard'}
+  go(path){location.hash=path}
+  emit(){this.onChange&&this.onChange(this.current())}
 }
 window.Router=Router;

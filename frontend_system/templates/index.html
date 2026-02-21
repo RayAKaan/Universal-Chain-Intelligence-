@@ -1,43 +1,62 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>UCI Frontend</title>
-  <link rel="icon" href="/static/assets/favicon.ico" />
+  <meta name="theme-color" content="#080b12" />
+  <title>UCI Command Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23080b12'/%3E%3Cpolygon points='16,3 28,10 28,22 16,29 4,22 4,10' fill='none' stroke='%2300d4ff' stroke-width='2'/%3E%3C/svg%3E" />
+  <style>
+    html,body{height:100%;margin:0;background:#05070a;color:#e8edf4;font-family:Inter,system-ui,sans-serif}
+    #boot{position:fixed;inset:0;display:grid;place-items:center;background:#05070a;z-index:9999}
+    #boot.hidden{display:none}
+  </style>
   <link rel="stylesheet" href="/static/css/main.css" />
-  <link rel="stylesheet" href="/static/css/dashboard.css" />
   <link rel="stylesheet" href="/static/css/components.css" />
-  <link rel="stylesheet" href="/static/css/themes.css" />
-  <link rel="stylesheet" href="/static/css/responsive.css" />
+  <link rel="stylesheet" href="/static/css/charts.css" />
+  <link rel="stylesheet" href="/static/css/views.css" />
+  <link rel="stylesheet" href="/static/css/dashboard.css" />
   <link rel="stylesheet" href="/static/css/animations.css" />
+  <link rel="stylesheet" href="/static/css/three-d.css" />
+  <link rel="stylesheet" href="/static/css/responsive.css" />
 </head>
-<body>
-  <header class="topbar"><div class="brand">🧠 Universal Chain Intelligence</div><div id="top-status">Connecting…</div></header>
-  <aside class="sidebar" id="sidebar"></aside>
-  <main class="content"><div id="view"></div></main>
-  <div id="toast-container"></div>
-  <div id="modal" class="modal hidden"><div class="modal-content"><div id="modal-body"></div></div></div>
-  <script src="/static/js/utils.js"></script>
-  <script src="/static/js/components.js"></script>
-  <script src="/static/js/charts.js"></script>
-  <script src="/static/js/api_client.js"></script>
-  <script src="/static/js/router.js"></script>
-  <script src="/static/js/dashboard.js"></script>
-  <script src="/static/js/goal_console.js"></script>
-  <script src="/static/js/capability_browser.js"></script>
-  <script src="/static/js/plan_viewer.js"></script>
-  <script src="/static/js/construction_workshop.js"></script>
-  <script src="/static/js/improvement_center.js"></script>
-  <script src="/static/js/safety_panel.js"></script>
-  <script src="/static/js/system_console.js"></script>
-  <script src="/static/js/settings_panel.js"></script>
-  <script src="/static/js/knowledge_explorer.js"></script>
-  <script src="/static/js/notification_center.js"></script>
-  <script src="/static/js/activity_timeline.js"></script>
-  <script src="/static/js/health_monitor.js"></script>
-  <script src="/static/js/websocket_client.js"></script>
-  <script src="/static/js/app.js"></script>
+<body class="theme-obsidian-lux">
+  <div id="boot"><div class="boot-logo">◈</div><div class="boot-title" id="boot-title"></div><div class="boot-sub">Initializing systems...</div></div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div id="app-shell" class="hidden">
+    <header id="header" class="horizon-bar"></header>
+    <aside id="sidebar" class="control-rail"></aside>
+    <main id="main-content"><div id="view-transition" class="view-transition"><section id="view-root"></section></div></main>
+    <footer id="status-strip" class="telemetry-bar"></footer>
+    <div id="toast-container" aria-live="polite"></div>
+    <div id="modal-container" class="hidden"></div>
+    <div id="command-palette" class="hidden" role="dialog" aria-modal="true"></div>
+  </div>
+  <script defer src="/static/js/utils.js"></script>
+  <script defer src="/static/js/components.js"></script>
+  <script defer src="/static/js/charts.js"></script>
+  <script defer src="/static/js/api_client.js"></script>
+  <script defer src="/static/js/router.js"></script>
+  <script defer src="/static/js/three/scene_manager.js"></script>
+  <script defer src="/static/js/three/particle_system.js"></script>
+  <script defer src="/static/js/three/topology_view.js"></script>
+  <script defer src="/static/js/three/neural_graph.js"></script>
+  <script defer src="/static/js/views/dashboard.js"></script>
+  <script defer src="/static/js/views/goal_console.js"></script>
+  <script defer src="/static/js/views/capability_browser.js"></script>
+  <script defer src="/static/js/views/plan_viewer.js"></script>
+  <script defer src="/static/js/views/construction_workshop.js"></script>
+  <script defer src="/static/js/views/improvement_center.js"></script>
+  <script defer src="/static/js/views/safety_panel.js"></script>
+  <script defer src="/static/js/views/system_console.js"></script>
+  <script defer src="/static/js/views/settings_panel.js"></script>
+  <script defer src="/static/js/views/knowledge_explorer.js"></script>
+  <script defer src="/static/js/views/notification_center.js"></script>
+  <script defer src="/static/js/views/activity_timeline.js"></script>
+  <script defer src="/static/js/views/health_monitor.js"></script>
+  <script defer src="/static/js/app.js"></script>
 </body>
 </html>

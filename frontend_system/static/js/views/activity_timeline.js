@@ -1,0 +1,1 @@
+class ActivityTimelineView{constructor(app){this.app=app}async mount(){const t=await this.app.api.getTimeline({limit:120});this.app.view.innerHTML=`<section class='card'><div class='card-header'><div class='card-title'>Activity Timeline</div></div><div class='card-body'>${UIComponents.timeline(t.events||[])}</div></section>`}} window.ActivityTimelineView=ActivityTimelineView;

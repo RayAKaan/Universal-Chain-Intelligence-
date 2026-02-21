@@ -1,5 +1,5 @@
-from frontend_system.server.api_handlers.base_handler import BaseAPIHandler
-class ImprovementHandler(BaseAPIHandler):
+from frontend_system.server.api_handlers.base_handler import BaseHandler
+class ImprovementHandler(BaseHandler):
     def list(self): return self.ok({'improvements':self.uci.get_improvements()})
     def active(self): return self.ok({'active':[i for i in self.uci.get_improvements() if i.get('status')!='applied']})
     def history(self): return self.ok({'history':self.uci.get_improvements()})

@@ -1,5 +1,5 @@
-from frontend_system.server.api_handlers.base_handler import BaseAPIHandler
-class SafetyHandler(BaseAPIHandler):
+from frontend_system.server.api_handlers.base_handler import BaseHandler
+class SafetyHandler(BaseHandler):
     def status(self): return self.ok(self.uci.get_safety_status())
     def audit(self,q):
         l=int(q.get('limit',100));o=int(q.get('offset',0));return self.ok({'audit':self.uci.get_audit_trail(l,o)})

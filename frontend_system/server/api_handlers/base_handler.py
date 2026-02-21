@@ -1,12 +1,18 @@
+import json
 
-class BaseAPIHandler:
+
+class BaseHandler:
     def __init__(self, connector):
         self.uci = connector
 
-    @staticmethod
-    def ok(data):
-        return 200, data
+    def response(self, data=None, error=None, status=200):
+        return status, {"ok": error is None, "data": data, "error": error}
 
-    @staticmethod
-    def error(msg, code=400):
-        return code, {'error': msg}
+    def ok(self, data=None, status=200):
+        return self.response(data=data, status=status)
+
+    def fail(self, message, status=400):
+        return self.response(error=message, status=status)
+
+
+BaseAPIHandler = BaseHandler
