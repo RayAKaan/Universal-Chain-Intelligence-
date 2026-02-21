@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,7 +13,17 @@
   <link rel="stylesheet" href="/static/css/animations.css" />
 </head>
 <body>
-  <header class="topbar"><div class="brand">🧠 Universal Chain Intelligence</div><div id="top-status">Connecting…</div></header>
+  <header class="topbar">
+    <div class="topbar-left">
+      <button id="menu-toggle" class="icon-btn" type="button" aria-label="Toggle sidebar">☰</button>
+      <div class="brand">🧠 Universal Chain Intelligence</div>
+      <div id="current-view-title">Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div id="top-status" class="status-pill">Connecting…</div>
+    </div>
+  </header>
+
   <aside class="sidebar" id="sidebar"></aside>
   <main class="content"><div id="view"></div></main>
   <div id="toast-container"></div>
