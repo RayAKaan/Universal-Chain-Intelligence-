@@ -7,7 +7,7 @@ class HealthMonitorView {
   async render() {
     const [h, r] = await Promise.all([
       this.app.api.get('/health/phases'),
-      this.app.api.getHealthResources(),
+      this.app.api.get('/health/resources'),
     ]);
 
     document.getElementById('view').innerHTML = `
