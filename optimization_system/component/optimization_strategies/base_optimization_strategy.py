@@ -1,0 +1,13 @@
+from __future__ import annotations
+from abc import ABC, abstractmethod
+class BaseOptimizationStrategy(ABC):
+    @property
+    @abstractmethod
+    def name(self): ...
+    @property
+    @abstractmethod
+    def target_metric(self): ...
+    @abstractmethod
+    def optimize(self,component_profile,context): ...
+    @abstractmethod
+    def can_optimize(self,component_profile): ...
