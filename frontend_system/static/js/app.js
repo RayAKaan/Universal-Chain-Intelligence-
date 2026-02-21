@@ -95,9 +95,9 @@ class UCIApp {
       if (topbar) topbar.classList.toggle('scrolled', window.scrollY > 8);
     });
 
-    document.addEventListener('click', (event) => {
-      const id = event.target?.id || '';
-      if (id === 'goal-submit' || id === 'quick-goal') {
+    document.addEventListener('submit', (event) => {
+      const text = event.target?.textContent?.toLowerCase() || '';
+      if (text.includes('goal')) {
         this._triggerOrbRipple();
       }
     });
@@ -189,10 +189,8 @@ class UCIApp {
     this.interval = setInterval(async () => {
       try {
         const status = await this.api.getStatus();
-        const statusLabel = status.status || status.overall_status || 'connected';
-        const activeGoals = status.active_goals ?? status.running_goals ?? 0;
-        document.getElementById('top-status').textContent = `${statusLabel} • ${activeGoals} active goals`;
-        this._setPresenceState(statusLabel);
+        document.getElementById('top-status').textContent = `${status.status} • ${status.active_goals} active goals`;
+        this._setPresenceState(status.status);
       } catch (_error) {
         document.getElementById('top-status').textContent = 'Disconnected';
         this._setPresenceState('error');
